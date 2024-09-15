@@ -1,0 +1,27 @@
+[
+    {
+      "question": "What is the capital of France?",
+      "type": "multiple_choice",
+      "answers": [
+        {"answer": "Berlin", "correct": false},
+        {"answer": "Paris", "correct": true},
+        {"answer": "Madrid", "correct": false},
+        {"answer": "Rome", "correct": false}
+      ],
+      "shuffle_answers": true,
+      "feedback": "Paris is the capital of France."
+    },
+    {
+      "question": "Which programming language is known for its snake logo?",
+      "type": "multiple_choice",
+      "answers": [
+        {"answer": "Python", "correct": true},
+        {"answer": "Java", "correct": false},
+        {"answer": "C++", "correct": false},
+        {"answer": "Ruby", "correct": false}
+      ],
+      "shuffle_answers": true,
+      "feedback": "Python is represented by a snake logo."
+    }
+  ]
+  
