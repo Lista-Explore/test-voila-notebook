@@ -1,27 +1,37 @@
 [
     {
-      "question": "What is the capital of France?",
-      "type": "multiple_choice",
-      "answers": [
-        {"answer": "Berlin", "correct": false},
-        {"answer": "Paris", "correct": true},
-        {"answer": "Madrid", "correct": false},
-        {"answer": "Rome", "correct": false}
-      ],
-      "shuffle_answers": true,
-      "feedback": "Paris is the capital of France."
+        "question": "Python is an interpreted language.",
+        "type": "multiple_choice",
+        "answers": [
+            {"answer": "True", "correct": true},
+            {"answer": "False", "correct": false}
+        ],
+        "shuffle_answers": true,
+        "feedback": "Python is indeed an interpreted language."
     },
     {
-      "question": "Which programming language is known for its snake logo?",
-      "type": "multiple_choice",
-      "answers": [
-        {"answer": "Python", "correct": true},
-        {"answer": "Java", "correct": false},
-        {"answer": "C++", "correct": false},
-        {"answer": "Ruby", "correct": false}
-      ],
-      "shuffle_answers": true,
-      "feedback": "Python is represented by a snake logo."
+        "question": "Which one of the following is not a programming language?",
+        "type": "multiple_choice",
+        "answers": [
+            {"answer": "JavaScript", "correct": false},
+            {"answer": "HTML", "correct": true},
+            {"answer": "Python", "correct": false},
+            {"answer": "Java", "correct": false}
+        ],
+        "shuffle_answers": true,
+        "feedback": "HTML is not a programming language; it's a markup language."
+    },
+    {
+        "question": "Select all prime numbers:",
+        "type": "multiple_choice",
+        "answers": [
+            {"answer": "2", "correct": true},
+            {"answer": "3", "correct": true},
+            {"answer": "4", "correct": false},
+            {"answer": "5", "correct": true},
+            {"answer": "6", "correct": false}
+        ],
+        "shuffle_answers": true,
+        "feedback": "2, 3, and 5 are prime numbers."
     }
-  ]
-  
+]
