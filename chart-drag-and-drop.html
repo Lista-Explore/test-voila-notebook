@@ -5,14 +5,12 @@
     <title>Data Flowchart Drag-and-Drop Activity</title>
     <style>
         /* Styles for the drag-and-drop activity */
-        #drag-container, #flowchart {
+        #drag-container {
             display: flex;
             justify-content: center;
-            margin-bottom: 20px;
-        }
-        #drag-container {
-            gap: 15px;
             flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 20px;
         }
         .draggable {
             width: 140px;
@@ -25,19 +23,24 @@
             font-weight: bold;
             cursor: grab;
             user-select: none;
-            margin: 5px;
+        }
+        #flowchart {
+            position: relative;
+            width: 600px;
+            height: 400px;
+            margin: 0 auto;
+            background-color: #fff;
         }
         .flowchart-node {
-            position: relative;
+            position: absolute;
             width: 150px;
-            height: 70px;
+            height: 50px;
             border: 2px dashed #ccc;
             border-radius: 5px;
             background-color: #fafafa;
             text-align: center;
-            line-height: 70px;
+            line-height: 50px;
             font-weight: bold;
-            margin: 20px;
             user-select: none;
         }
         .flowchart-node.correct {
@@ -48,38 +51,11 @@
             background-color: #ffcdd2;
             border-color: #c62828;
         }
-        /* Flowchart layout */
-        #flowchart {
-            flex-direction: column;
-            align-items: center;
-        }
-        .flowchart-row {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            position: relative;
-        }
-        .arrow {
-            width: 0;
-            height: 0;
-            border-left: 10px solid transparent;
-            border-right: 10px solid transparent;
-            border-top: 20px solid #000;
+        /* Edge styles */
+        .edge {
             position: absolute;
-            top: -20px;
-        }
-        .arrow-down {
-            transform: rotate(0deg);
-        }
-        .arrow-left {
-            transform: rotate(-90deg);
-            left: -75px;
-            top: 35px;
-        }
-        .arrow-right {
-            transform: rotate(90deg);
-            right: -75px;
-            top: 35px;
+            width: 2px;
+            background-color: #000;
         }
     </style>
 </head>
@@ -92,42 +68,22 @@
         <div class="draggable" draggable="true" id="etl-process">ETL Process</div>
         <div class="draggable" draggable="true" id="data-warehouse">Data Warehouse</div>
         <div class="draggable" draggable="true" id="data-lake">Data Lake</div>
-        <div class="draggable" draggable="true" id="analytics-apps">Analytics Applications</div>
-        <div class="draggable" draggable="true" id="bi-tools">BI Tools</div>
+        <div class="draggable" draggable="true" id="analytics">Analytics</div>
     </div>
 
     <div id="flowchart">
-        <!-- Root Node -->
-        <div class="flowchart-row">
-            <div class="flowchart-node" id="node1">?</div>
-        </div>
-        <!-- Arrow Down -->
-        <div class="arrow arrow-down"></div>
-        <!-- Second Level Nodes -->
-        <div class="flowchart-row">
-            <div class="flowchart-node" id="node2">?</div>
-            <!-- Arrows to the sides -->
-            <div class="arrow arrow-left"></div>
-            <div class="arrow arrow-right"></div>
-        </div>
-        <!-- Third Level Nodes -->
-        <div class="flowchart-row">
-            <div class="flowchart-node" id="node3">?</div>
-            <div style="width: 150px;"></div>
-            <div class="flowchart-node" id="node4">?</div>
-        </div>
-        <!-- Arrows Down from Third Level Nodes -->
-        <div class="flowchart-row">
-            <div class="arrow arrow-down" style="left: -75px;"></div>
-            <div style="width: 150px;"></div>
-            <div class="arrow arrow-down" style="right: -75px;"></div>
-        </div>
-        <!-- Fourth Level Nodes -->
-        <div class="flowchart-row">
-            <div class="flowchart-node" id="node5">?</div>
-            <div style="width: 150px;"></div>
-            <div class="flowchart-node" id="node6">?</div>
-        </div>
+        <!-- Nodes -->
+        <div class="flowchart-node" id="node1" style="left: 225px; top: 20px;">?</div>
+        <div class="flowchart-node" id="node2" style="left: 75px; top: 150px;">?</div>
+        <div class="flowchart-node" id="node3" style="left: 375px; top: 150px;">?</div>
+        <div class="flowchart-node" id="node4" style="left: 75px; top: 280px;">?</div>
+        <div class="flowchart-node" id="node5" style="left: 375px; top: 280px;">?</div>
+
+        <!-- Edges -->
+        <div class="edge" style="left: 300px; top: 70px; height: 80px;"></div> <!-- Node1 to Node3 -->
+        <div class="edge" style="left: 225px; top: 70px; height: 80px;"></div> <!-- Node1 to Node2 -->
+        <div class="edge" style="left: 150px; top: 200px; height: 80px;"></div> <!-- Node2 to Node4 -->
+        <div class="edge" style="left: 450px; top: 200px; height: 80px;"></div> <!-- Node3 to Node5 -->
     </div>
 
     <script>
@@ -140,10 +96,9 @@
             const correctMappings = {
                 node1: 'data-sources',
                 node2: 'etl-process',
-                node3: 'data-warehouse',
-                node4: 'data-lake',
-                node5: 'bi-tools',
-                node6: 'analytics-apps'
+                node3: 'analytics',
+                node4: 'data-warehouse',
+                node5: 'data-lake'
             };
 
             draggables.forEach(draggable => {
@@ -168,25 +123,23 @@
                         draggableElement.parentNode.textContent = '?';
                     }
 
-                    // Return existing draggable to drag-container if node already has one
-                    if (node.firstChild && node.firstChild !== draggableElement) {
-                        const existingDraggable = node.firstChild;
-                        document.getElementById('drag-container').appendChild(existingDraggable);
+                    // Return existing draggable in node to drag-container if any
+                    if (node.firstChild && node.firstChild.classList.contains('draggable')) {
+                        document.getElementById('drag-container').appendChild(node.firstChild);
                     }
 
+                    // Append draggable to node
                     node.appendChild(draggableElement);
 
                     // Check if the draggable matches the correct node
                     if (correctMappings[node.id] === draggableId) {
                         node.classList.add('correct');
                         node.classList.remove('incorrect');
-                        node.firstChild.style.display = 'none'; // Hide the draggable text
-                        node.textContent = draggableElement.textContent;
+                        node.textContent = ''; // Remove the '?'
                     } else {
                         node.classList.add('incorrect');
                         node.classList.remove('correct');
-                        node.firstChild.style.display = ''; // Show the draggable text
-                        node.textContent = '?';
+                        node.textContent = '?'; // Keep the '?'
                     }
                 });
             });
