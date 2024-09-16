@@ -2,19 +2,23 @@
 import hashlib
 from ipywidgets import widgets
 from IPython.display import display, clear_output
+import json
+import urllib.request
 
-# List of questions and their hashed answers
-questions_list = [
-    {
-        "question": "Python was created by ____ van Rossum.",
-        "answer_hash": hashlib.sha256("Guido".lower().encode()).hexdigest()
-    },
-    {
-        "question": "The capital of France is _____.",
-        "answer_hash": hashlib.sha256("Paris".lower().encode()).hexdigest()
-    },
-    # Add more questions here
-]
+# Function to load questions from a URL or local file
+def load_questions(file_path_or_url):
+    try:
+        # Try to open as a URL
+        response = urllib.request.urlopen(file_path_or_url)
+        questions = json.loads(response.read().decode('utf-8'))
+    except:
+        # If it's not a URL, try to open as a local file
+        with open(file_path_or_url, 'r') as f:
+            questions = json.load(f)
+    # For each question, compute the hash of the answer
+    for q in questions:
+        q['answer_hash'] = hashlib.sha256(q['answer'].lower().encode()).hexdigest()
+    return questions
 
 # Function to validate the answer
 def validate_answer(answer_hash, user_answer):
@@ -22,7 +26,8 @@ def validate_answer(answer_hash, user_answer):
     return user_answer_hash == answer_hash
 
 # Function to display questions one at a time
-def display_questions():
+def display_questions(questions_file):
+    questions_list = load_questions(questions_file)
     index = 0
     num_questions = len(questions_list)
 
