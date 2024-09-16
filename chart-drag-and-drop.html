@@ -5,15 +5,16 @@
     <title>Data Flowchart Drag-and-Drop Activity</title>
     <style>
         /* Styles for the drag-and-drop activity */
-        #drag-container {
+        #drag-container, #flowchart {
             display: flex;
             justify-content: center;
-            flex-wrap: wrap;
-            gap: 15px;
             margin-bottom: 20px;
         }
+        #drag-container {
+            gap: 15px;
+        }
         .draggable {
-            width: 140px;
+            width: 120px;
             height: 50px;
             border: 2px solid #ccc;
             border-radius: 5px;
@@ -24,23 +25,17 @@
             cursor: grab;
             user-select: none;
         }
-        #flowchart {
-            position: relative;
-            width: 600px;
-            height: 400px;
-            margin: 0 auto;
-            background-color: #fff;
-        }
         .flowchart-node {
-            position: absolute;
+            position: relative;
             width: 150px;
-            height: 50px;
+            height: 70px;
             border: 2px dashed #ccc;
             border-radius: 5px;
             background-color: #fafafa;
             text-align: center;
-            line-height: 50px;
+            line-height: 70px;
             font-weight: bold;
+            margin: 10px;
             user-select: none;
         }
         .flowchart-node.correct {
@@ -51,39 +46,55 @@
             background-color: #ffcdd2;
             border-color: #c62828;
         }
-        /* Edge styles */
-        .edge {
-            position: absolute;
+        /* Simple flowchart layout */
+        #flowchart {
+            flex-direction: column;
+            align-items: center;
+        }
+        .flowchart-row {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .arrow {
             width: 2px;
+            height: 50px;
             background-color: #000;
+            margin: 0 10px;
+        }
+        .horizontal-arrow {
+            width: 50px;
+            height: 2px;
+            background-color: #000;
+            margin: 0 10px;
         }
     </style>
 </head>
 <body>
-    <h2>Data Flowchart Drag-and-Drop Activity</h2>
-    <p>Drag each component to its correct place in the data flowchart:</p>
+    <h2>Flowchart Drag-and-Drop Activity</h2>
+    <p>Drag each item to its correct place in the flowchart:</p>
 
     <div id="drag-container">
-        <div class="draggable" draggable="true" id="data-sources">Data Sources</div>
-        <div class="draggable" draggable="true" id="etl-process">ETL Process</div>
-        <div class="draggable" draggable="true" id="data-warehouse">Data Warehouse</div>
-        <div class="draggable" draggable="true" id="data-lake">Data Lake</div>
-        <div class="draggable" draggable="true" id="analytics">Analytics</div>
+        <div class="draggable" draggable="true" id="item1">Item 1</div>
+        <div class="draggable" draggable="true" id="item2">Item 2</div>
+        <div class="draggable" draggable="true" id="item3">Item 3</div>
+        <div class="draggable" draggable="true" id="item4">Item 4</div>
     </div>
 
     <div id="flowchart">
-        <!-- Nodes -->
-        <div class="flowchart-node" id="node1" style="left: 225px; top: 20px;">?</div>
-        <div class="flowchart-node" id="node2" style="left: 75px; top: 150px;">?</div>
-        <div class="flowchart-node" id="node3" style="left: 375px; top: 150px;">?</div>
-        <div class="flowchart-node" id="node4" style="left: 75px; top: 280px;">?</div>
-        <div class="flowchart-node" id="node5" style="left: 375px; top: 280px;">?</div>
-
-        <!-- Edges -->
-        <div class="edge" style="left: 300px; top: 70px; height: 80px;"></div> <!-- Node1 to Node3 -->
-        <div class="edge" style="left: 225px; top: 70px; height: 80px;"></div> <!-- Node1 to Node2 -->
-        <div class="edge" style="left: 150px; top: 200px; height: 80px;"></div> <!-- Node2 to Node4 -->
-        <div class="edge" style="left: 450px; top: 200px; height: 80px;"></div> <!-- Node3 to Node5 -->
+        <div class="flowchart-row">
+            <div class="flowchart-node" id="node1">?</div>
+        </div>
+        <div class="arrow"></div>
+        <div class="flowchart-row">
+            <div class="flowchart-node" id="node2">?</div>
+            <div class="horizontal-arrow"></div>
+            <div class="flowchart-node" id="node3">?</div>
+        </div>
+        <div class="arrow"></div>
+        <div class="flowchart-row">
+            <div class="flowchart-node" id="node4">?</div>
+        </div>
     </div>
 
     <script>
@@ -94,11 +105,10 @@
 
             // Mapping of node IDs to correct draggable IDs
             const correctMappings = {
-                node1: 'data-sources',
-                node2: 'etl-process',
-                node3: 'analytics',
-                node4: 'data-warehouse',
-                node5: 'data-lake'
+                node1: 'item1',
+                node2: 'item2',
+                node3: 'item3',
+                node4: 'item4'
             };
 
             draggables.forEach(draggable => {
@@ -123,23 +133,23 @@
                         draggableElement.parentNode.textContent = '?';
                     }
 
-                    // Return existing draggable in node to drag-container if any
-                    if (node.firstChild && node.firstChild.classList.contains('draggable')) {
-                        document.getElementById('drag-container').appendChild(node.firstChild);
+                    // Clear existing child if node already has one
+                    if (node.firstChild) {
+                        const existingDraggable = node.firstChild;
+                        document.getElementById('drag-container').appendChild(existingDraggable);
                     }
 
-                    // Append draggable to node
                     node.appendChild(draggableElement);
 
                     // Check if the draggable matches the correct node
                     if (correctMappings[node.id] === draggableId) {
                         node.classList.add('correct');
                         node.classList.remove('incorrect');
-                        node.textContent = ''; // Remove the '?'
+                        node.textContent = draggableElement.textContent;
                     } else {
                         node.classList.add('incorrect');
                         node.classList.remove('correct');
-                        node.textContent = '?'; // Keep the '?'
+                        node.textContent = '?';
                     }
                 });
             });
