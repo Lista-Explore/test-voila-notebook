@@ -37,119 +37,121 @@ def generate_html(questions):
     # HTML Template
     html_template = f"""
     <!DOCTYPE html>
-    <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Drag-and-Drop Activity</title>
-        <style>
-            /* CSS Styles */
-            #drag-container, #drop-container {{
-                display: flex;
-                gap: 15px;
-                margin-bottom: 20px;
-                flex-wrap: wrap;
-            }}
-            .draggable, .dropzone {{
-                width: 150px;
-                height: 60px;
-                border: 2px solid #ccc;
-                border-radius: 5px;
-                text-align: center;
-                line-height: 60px;
-                font-weight: bold;
-                user-select: none;
-            }}
-            .draggable {{
-                background-color: #f0f0f0;
-                cursor: grab;
-            }}
-            .dropzone {{
-                background-color: #fafafa;
-                position: relative;
-            }}
-            .dropzone.correct {{
-                background-color: #c8e6c9;
-                border-color: #2e7d32;
-            }}
-            .dropzone.incorrect {{
-                background-color: #ffcdd2;
-                border-color: #c62828;
-            }}
-            .feedback {{
-                margin-top: 10px;
-                font-size: 1.2em;
-                font-weight: bold;
-            }}
-            img {{
-                max-width: 100%;
-                height: auto;
-                margin-bottom: 20px;
-            }}
-        </style>
-    </head>
-    <body>
-        {"<img src='" + image_url + "' alt='Image' width='400'>" if image_url else ""}
-        <p>Drag each item into its corresponding space:</p>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Drag-and-Drop Activity</title>
+    <style>
+        /* Your CSS styles */
+        #drag-container, #drop-container {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        .draggable, .dropzone {
+            width: 100px;
+            height: 60px;
+            border: 2px solid #ccc;
+            border-radius: 5px;
+            text-align: center;
+            line-height: 60px;
+            font-weight: bold;
+            user-select: none;
+        }
+        .draggable {
+            background-color: #f0f0f0;
+            cursor: grab;
+        }
+        .dropzone {
+            background-color: #fafafa;
+        }
+        .dropzone.correct {
+            background-color: #c8e6c9;
+            border-color: #2e7d32;
+        }
+        .dropzone.incorrect {
+            background-color: #ffcdd2;
+            border-color: #c62828;
+        }
+    </style>
+</head>
+<body>
+    <p>Drag each item into its corresponding space:</p>
 
-        <div id="drag-container">
-            {draggable_html}
-        </div>
+    <div id="drag-container"></div>
+    <div id="drop-container"></div>
 
-        <div id="drop-container">
-            {dropzone_html}
-        </div>
+    <script>
+        // Fetch the questions file
+        fetch('questions.json') // This will be replaced with the actual URL in the notebook
+            .then(response => response.json())
+            .then(data => {
+                const dragContainer = document.getElementById('drag-container');
+                const dropContainer = document.getElementById('drop-container');
 
-        <div class="feedback" id="feedback"></div>
+                // Create draggable items
+                data.items.forEach(item => {
+                    const draggable = document.createElement('div');
+                    draggable.className = 'draggable';
+                    draggable.draggable = true;
+                    draggable.id = item.id;
+                    draggable.textContent = item.label;
+                    dragContainer.appendChild(draggable);
+                });
 
-        <script>
-            (function() {{
-                const draggables = document.querySelectorAll('.draggable');
-                const dropzones = document.querySelectorAll('.dropzone');
-                const feedback = document.getElementById('feedback');
+                // Create dropzones
+                data.items.forEach(item => {
+                    const dropzone = document.createElement('div');
+                    dropzone.className = 'dropzone';
+                    dropzone.id = item.correct_space;
+                    dropzone.textContent = item.correct_space;
+                    dropContainer.appendChild(dropzone);
+                });
 
-                // Create a mapping of dropzone IDs to correct item IDs
-                const correctMapping = {{
-                    {", ".join([f'"{dz["id"]}": {dz["correct_items"]}' for dz in dropzones])}
-                }};
+                // Set up drag-and-drop functionality
+                setUpDragAndDrop();
+            });
 
-                draggables.forEach(draggable => {{
-                    draggable.addEventListener('dragstart', e => {{
-                        e.dataTransfer.setData('text/plain', e.target.id);
-                    }});
-                }});
+        function setUpDragAndDrop() {
+            const draggables = document.querySelectorAll('.draggable');
+            const dropzones = document.querySelectorAll('.dropzone');
 
-                dropzones.forEach(dropzone => {{
-                    dropzone.addEventListener('dragover', e => {{
-                        e.preventDefault(); // Allow dropping
-                    }});
+            draggables.forEach(draggable => {
+                draggable.addEventListener('dragstart', e => {
+                    e.dataTransfer.setData('text/plain', e.target.id);
+                });
+            });
 
-                    dropzone.addEventListener('drop', e => {{
-                        e.preventDefault();
-                        const draggableId = e.dataTransfer.getData('text/plain');
-                        const draggableElement = document.getElementById(draggableId);
+            dropzones.forEach(dropzone => {
+                dropzone.addEventListener('dragover', e => {
+                    e.preventDefault(); // Allow dropping
+                });
 
-                        if (!dropzone.hasChildNodes()) {{
-                            dropzone.appendChild(draggableElement);
-                        }}
+                dropzone.addEventListener('drop', e => {
+                    e.preventDefault();
+                    const draggableId = e.dataTransfer.getData('text/plain');
+                    const draggableElement = document.getElementById(draggableId);
 
-                        // Check correctness
-                        const correctItems = correctMapping[dropzone.id];
-                        if (Array.isArray(correctItems) && correctItems.includes(draggableId)) {{
-                            dropzone.classList.add('correct');
-                            dropzone.classList.remove('incorrect');
-                            feedback.innerText = "✅ Correct!";
-                        }} else {{
-                            dropzone.classList.add('incorrect');
-                            dropzone.classList.remove('correct');
-                            feedback.innerText = "❌ Incorrect. Please try again.";
-                        }}
-                    }});
-                }});
-            }})();
-        </script>
-    </body>
-    </html>
+                    if (!dropzone.hasChildNodes()) {
+                        dropzone.appendChild(draggableElement);
+                    }
+
+                    const correctSpaceId = data.items.find(item => item.id === draggableId).correct_space;
+                    if (correctSpaceId === dropzone.id) {
+                        dropzone.classList.add('correct');
+                        dropzone.classList.remove('incorrect');
+                    } else {
+                        dropzone.classList.add('incorrect');
+                        dropzone.classList.remove('correct');
+                    }
+                });
+            });
+        }
+    </script>
+</body>
+</html>
+
     """
     return html_template
 
