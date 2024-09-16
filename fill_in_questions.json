@@ -1,7 +1,7 @@
 [
     {
         "question": "Python was created by ____ van Rossum.",
-        "answer": "Guido"
+        "answer": ["Guido", "guido"]
     },
     {
         "question": "The capital of France is ____.",
@@ -9,6 +9,18 @@
     },
     {
         "question": "The chemical symbol for water is ___.",
-        "answer": "H2O"
+        "answer": ["H2O", "h2o"]
+    },
+    {
+        "question": "The sum of ____ and ____ is 5.",
+        "blanks": [
+            ["2", "two"],
+            ["3", "three"]
+        ]
+    },
+    {
+        "question": "Identify the object in the image.",
+        "answer": ["Pyramid", "pyramid"],
+        "image": "https://upload.wikimedia.org/wikipedia/commons/e/e3/Kheops-Pyramid.jpg"
     }
 ]
