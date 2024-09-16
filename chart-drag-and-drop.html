@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Flowchart Drag-and-Drop Activity</title>
+    <style>
+        /* CSS styles for the drag-and-drop elements */
+        #drag-container, #drop-container {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            justify-content: center;
+        }
+        .draggable, .dropzone {
+            width: 120px;
+            height: 50px;
+            border: 2px solid #ccc;
+            border-radius: 5px;
+            text-align: center;
+            line-height: 50px;
+            font-weight: bold;
+            user-select: none;
+        }
+        .draggable {
+            background-color: #f0f0f0;
+            cursor: grab;
+        }
+        .dropzone {
+            background-color: #fafafa;
+            position: relative;
+        }
+        .dropzone.correct {
+            background-color: #c8e6c9;
+            border-color: #2e7d32;
+        }
+    </style>
+</head>
+<body>
+    <p>Drag each data component into its corresponding flowchart node:</p>
+
+    <!-- Draggable items representing data components -->
+    <div id="drag-container">
+        <div class="draggable" draggable="true" id="item1">Data Source</div>
+        <div class="draggable" draggable="true" id="item2">Data Warehouse</div>
+        <div class="draggable" draggable="true" id="item3">Data Analysis</div>
+    </div>
+
+    <!-- Flowchart structure with nodes -->
+    <div id="drop-container">
+        <div class="dropzone" id="space1">?</div>
+        <div class="dropzone" id="space2">?</div>
+        <div class="dropzone" id="space3">?</div>
+    </div>
+
+    <script>
+        // JavaScript code for drag-and-drop functionality
+        (function() {
+            const draggables = document.querySelectorAll('.draggable');
+            const dropzones = document.querySelectorAll('.dropzone');
+
+            draggables.forEach(draggable => {
+                draggable.addEventListener('dragstart', e => {
+                    e.dataTransfer.setData('text/plain', e.target.id);
+                });
+            });
+
+            dropzones.forEach(dropzone => {
+                dropzone.addEventListener('dragover', e => {
+                    e.preventDefault(); // Allow dropping
+                });
+
+                dropzone.addEventListener('drop', e => {
+                    e.preventDefault();
+                    const draggableId = e.dataTransfer.getData('text/plain');
+                    const draggableElement = document.getElementById(draggableId);
+
+                    // If correct match, update node to green and display correct text
+                    if (draggableId.replace('item', '') === dropzone.id.replace('space', '')) {
+                        dropzone.classList.add('correct');
+                        dropzone.innerText = draggableElement.innerText;
+                    }
+                });
+            });
+        })();
+    </script>
+</body>
+</html>
