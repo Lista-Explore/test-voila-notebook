@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Data Flowchart Drag-and-Drop Activity</title>
+    <title>Flowchart Drag-and-Drop Activity</title>
     <style>
         /* Container Styles */
         #drag-container {
@@ -65,10 +65,11 @@
             margin: -10px auto;
         }
         .arrow-side {
-            width: 20px;
+            width: 50px;
             height: 0;
             border-top: 2px solid #000;
             position: relative;
+            margin: 0 10px;
         }
         .arrow-side::after {
             content: '';
@@ -84,6 +85,7 @@
         .flowchart-row {
             display: flex;
             align-items: center;
+            justify-content: center;
         }
         .flowchart-branch {
             display: flex;
@@ -99,7 +101,7 @@
     </style>
 </head>
 <body>
-    <h2>Data Flowchart Drag-and-Drop Activity</h2>
+    <h2>Flowchart Drag-and-Drop Activity</h2>
     <p>Drag each component to its correct place in the data flowchart:</p>
 
     <div id="drag-container">
@@ -175,13 +177,12 @@
                     const draggableId = e.dataTransfer.getData('text/plain');
                     const draggableElement = document.getElementById(draggableId);
 
-                    // Remove draggable from previous node if necessary
-                    if (draggableElement.parentNode.classList.contains('flowchart-node')) {
-                        draggableElement.parentNode.classList.remove('correct', 'incorrect');
-                        draggableElement.parentNode.textContent = '?';
+                    // Check if the node already contains a child node and remove it if necessary
+                    if (node.contains(draggableElement)) {
+                        return;
                     }
-
-                    // Remove any existing child in the node
+                    
+                    // Check if a draggable is already present, remove it and append back to drag-container
                     if (node.firstChild && node.firstChild.classList.contains('draggable')) {
                         document.getElementById('drag-container').appendChild(node.firstChild);
                     }
