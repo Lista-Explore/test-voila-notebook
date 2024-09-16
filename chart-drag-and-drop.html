@@ -5,15 +5,16 @@
     <title>Data Flowchart Drag-and-Drop Activity</title>
     <style>
         /* Styles for the drag-and-drop activity */
-        #drag-container {
+        #drag-container, #flowchart {
             display: flex;
             justify-content: center;
-            flex-wrap: wrap;
-            gap: 15px;
             margin-bottom: 20px;
         }
+        #drag-container {
+            gap: 15px;
+        }
         .draggable {
-            width: 140px;
+            width: 120px;
             height: 50px;
             border: 2px solid #ccc;
             border-radius: 5px;
@@ -24,23 +25,17 @@
             cursor: grab;
             user-select: none;
         }
-        #flowchart {
-            position: relative;
-            width: 600px;
-            height: 500px;
-            margin: 0 auto;
-            border: 1px solid #ddd;
-        }
         .flowchart-node {
-            position: absolute;
-            width: 160px;
-            height: 60px;
+            position: relative;
+            width: 150px;
+            height: 70px;
             border: 2px dashed #ccc;
             border-radius: 5px;
             background-color: #fafafa;
             text-align: center;
-            line-height: 60px;
+            line-height: 70px;
             font-weight: bold;
+            margin: 10px;
             user-select: none;
         }
         .flowchart-node.correct {
@@ -51,83 +46,55 @@
             background-color: #ffcdd2;
             border-color: #c62828;
         }
-        /* Arrow styles */
-        .arrow {
-            position: absolute;
+        /* Simple flowchart layout */
+        #flowchart {
+            flex-direction: column;
+            align-items: center;
         }
-        /* Hide overflowing arrows */
-        #flowchart svg {
-            overflow: visible;
+        .flowchart-row {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .arrow {
+            width: 2px;
+            height: 50px;
+            background-color: #000;
+            margin: 0 10px;
+        }
+        .horizontal-arrow {
+            width: 50px;
+            height: 2px;
+            background-color: #000;
+            margin: 0 10px;
         }
     </style>
 </head>
 <body>
-    <h2>Data Flowchart Drag-and-Drop Activity</h2>
-    <p>Drag each component to its correct place in the data flowchart:</p>
+    <h2>Flowchart Drag-and-Drop Activity</h2>
+    <p>Drag each item to its correct place in the flowchart:</p>
 
     <div id="drag-container">
-        <div class="draggable" draggable="true" id="data-sources">Data Sources</div>
-        <div class="draggable" draggable="true" id="etl-process">ETL Process</div>
-        <div class="draggable" draggable="true" id="data-lake">Data Lake</div>
-        <div class="draggable" draggable="true" id="data-warehouse">Data Warehouse</div>
-        <div class="draggable" draggable="true" id="data-mart">Data Mart</div>
-        <div class="draggable" draggable="true" id="analytics-tools">Analytics Tools</div>
-        <div class="draggable" draggable="true" id="reporting-tools">Reporting Tools</div>
+        <div class="draggable" draggable="true" id="item1">Item 1</div>
+        <div class="draggable" draggable="true" id="item2">Item 2</div>
+        <div class="draggable" draggable="true" id="item3">Item 3</div>
+        <div class="draggable" draggable="true" id="item4">Item 4</div>
     </div>
 
     <div id="flowchart">
-        <!-- Nodes -->
-        <div class="flowchart-node" id="node1" style="top: 20px; left: 220px;">?</div>
-
-        <div class="flowchart-node" id="node2" style="top: 120px; left: 50px;">?</div>
-        <div class="flowchart-node" id="node3" style="top: 120px; left: 390px;">?</div>
-
-        <div class="flowchart-node" id="node4" style="top: 220px; left: 50px;">?</div>
-        <div class="flowchart-node" id="node5" style="top: 220px; left: 390px;">?</div>
-
-        <div class="flowchart-node" id="node6" style="top: 320px; left: 220px;">?</div>
-
-        <div class="flowchart-node" id="node7" style="top: 420px; left: 220px;">?</div>
-
-        <!-- Arrows -->
-        <!-- Arrow from node1 to node2 -->
-        <svg class="arrow" style="top: 70px; left: 245px;">
-            <line x1="0" y1="0" x2="-160" y2="50" stroke="black" stroke-width="2" marker-end="url(#arrowhead)" />
-        </svg>
-        <!-- Arrow from node1 to node3 -->
-        <svg class="arrow" style="top: 70px; left: 275px;">
-            <line x1="0" y1="0" x2="160" y2="50" stroke="black" stroke-width="2" marker-end="url(#arrowhead)" />
-        </svg>
-        <!-- Arrow from node2 to node4 -->
-        <svg class="arrow" style="top: 170px; left: 75px;">
-            <line x1="0" y1="0" x2="0" y2="50" stroke="black" stroke-width="2" marker-end="url(#arrowhead)" />
-        </svg>
-        <!-- Arrow from node3 to node5 -->
-        <svg class="arrow" style="top: 170px; left: 415px;">
-            <line x1="0" y1="0" x2="0" y2="50" stroke="black" stroke-width="2" marker-end="url(#arrowhead)" />
-        </svg>
-        <!-- Arrow from node4 to node6 -->
-        <svg class="arrow" style="top: 270px; left: 115px;">
-            <line x1="0" y1="0" x2="170" y2="50" stroke="black" stroke-width="2" marker-end="url(#arrowhead)" />
-        </svg>
-        <!-- Arrow from node5 to node6 -->
-        <svg class="arrow" style="top: 270px; left: 435px;">
-            <line x1="0" y1="0" x2="-170" y2="50" stroke="black" stroke-width="2" marker-end="url(#arrowhead)" />
-        </svg>
-        <!-- Arrow from node6 to node7 -->
-        <svg class="arrow" style="top: 370px; left: 245px;">
-            <line x1="0" y1="0" x2="0" y2="50" stroke="black" stroke-width="2" marker-end="url(#arrowhead)" />
-        </svg>
-
-        <!-- Arrowhead definition -->
-        <svg width="0" height="0">
-            <defs>
-                <marker id="arrowhead" markerWidth="10" markerHeight="7"
-                        refX="0" refY="3.5" orient="auto">
-                    <polygon points="0 0, 10 3.5, 0 7" fill="black" />
-                </marker>
-            </defs>
-        </svg>
+        <div class="flowchart-row">
+            <div class="flowchart-node" id="node1">?</div>
+        </div>
+        <div class="arrow"></div>
+        <div class="flowchart-row">
+            <div class="flowchart-node" id="node2">?</div>
+            <div class="horizontal-arrow"></div>
+            <div class="flowchart-node" id="node3">?</div>
+        </div>
+        <div class="arrow"></div>
+        <div class="flowchart-row">
+            <div class="flowchart-node" id="node4">?</div>
+        </div>
     </div>
 
     <script>
@@ -138,13 +105,10 @@
 
             // Mapping of node IDs to correct draggable IDs
             const correctMappings = {
-                node1: 'data-sources',
-                node2: 'etl-process',
-                node3: 'data-lake',
-                node4: 'data-warehouse',
-                node5: 'data-mart',
-                node6: 'analytics-tools',
-                node7: 'reporting-tools'
+                node1: 'item1',
+                node2: 'item2',
+                node3: 'item3',
+                node4: 'item4'
             };
 
             draggables.forEach(draggable => {
@@ -169,8 +133,8 @@
                         draggableElement.parentNode.textContent = '?';
                     }
 
-                    // Return any existing draggable to the drag container
-                    if (node.firstChild && node.firstChild.classList.contains('draggable')) {
+                    // Clear existing child if node already has one
+                    if (node.firstChild) {
                         const existingDraggable = node.firstChild;
                         document.getElementById('drag-container').appendChild(existingDraggable);
                     }
