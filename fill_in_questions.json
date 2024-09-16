@@ -1,0 +1,15 @@
+[
+    {
+        "question": "Python was created by ____ van Rossum.",
+        "answer": "Guido"
+    },
+    {
+        "question": "The capital of France is ____.",
+        "answer": "Paris"
+    },
+    {
+        "question": "The chemical symbol for water is ___.",
+        "answer": "H2O"
+    }
+    // Add more questions as needed
+]
