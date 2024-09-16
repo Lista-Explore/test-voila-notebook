@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <title>Data Flowchart Drag-and-Drop Activity</title>
     <style>
-        /* Styles for the drag-and-drop activity */
+        /* Container Styles */
         #drag-container {
             display: flex;
             justify-content: center;
@@ -12,6 +12,13 @@
             gap: 15px;
             margin-bottom: 20px;
         }
+        #flowchart {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* Draggable Items */
         .draggable {
             width: 140px;
             height: 50px;
@@ -24,23 +31,19 @@
             cursor: grab;
             user-select: none;
         }
-        #flowchart {
-            position: relative;
-            width: 600px;
-            height: 400px;
-            margin: 0 auto;
-            background-color: #fff;
-        }
+
+        /* Flowchart Nodes */
         .flowchart-node {
-            position: absolute;
-            width: 150px;
-            height: 50px;
+            position: relative;
+            width: 160px;
+            height: 70px;
             border: 2px dashed #ccc;
             border-radius: 5px;
             background-color: #fafafa;
             text-align: center;
-            line-height: 50px;
+            line-height: 70px;
             font-weight: bold;
+            margin: 10px;
             user-select: none;
         }
         .flowchart-node.correct {
@@ -51,11 +54,47 @@
             background-color: #ffcdd2;
             border-color: #c62828;
         }
-        /* Edge styles */
-        .edge {
+
+        /* Edges (Arrows) */
+        .arrow-down {
+            width: 0;
+            height: 0;
+            border-left: 10px solid transparent;
+            border-right: 10px solid transparent;
+            border-top: 20px solid #000;
+            margin: -10px auto;
+        }
+        .arrow-side {
+            width: 20px;
+            height: 0;
+            border-top: 2px solid #000;
+            position: relative;
+        }
+        .arrow-side::after {
+            content: '';
             position: absolute;
-            width: 2px;
-            background-color: #000;
+            top: -5px;
+            right: -5px;
+            border-top: 7px solid transparent;
+            border-left: 7px solid #000;
+            border-bottom: 7px solid transparent;
+        }
+
+        /* Flowchart Layout */
+        .flowchart-row {
+            display: flex;
+            align-items: center;
+        }
+        .flowchart-branch {
+            display: flex;
+            justify-content: center;
+            width: 100%;
+        }
+        .branch-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 0 20px;
         }
     </style>
 </head>
@@ -68,22 +107,40 @@
         <div class="draggable" draggable="true" id="etl-process">ETL Process</div>
         <div class="draggable" draggable="true" id="data-warehouse">Data Warehouse</div>
         <div class="draggable" draggable="true" id="data-lake">Data Lake</div>
-        <div class="draggable" draggable="true" id="analytics">Analytics</div>
+        <div class="draggable" draggable="true" id="data-analytics">Data Analytics</div>
+        <div class="draggable" draggable="true" id="reporting">Reporting</div>
     </div>
 
     <div id="flowchart">
-        <!-- Nodes -->
-        <div class="flowchart-node" id="node1" style="left: 225px; top: 20px;">?</div>
-        <div class="flowchart-node" id="node2" style="left: 75px; top: 150px;">?</div>
-        <div class="flowchart-node" id="node3" style="left: 375px; top: 150px;">?</div>
-        <div class="flowchart-node" id="node4" style="left: 75px; top: 280px;">?</div>
-        <div class="flowchart-node" id="node5" style="left: 375px; top: 280px;">?</div>
-
-        <!-- Edges -->
-        <div class="edge" style="left: 300px; top: 70px; height: 80px;"></div> <!-- Node1 to Node3 -->
-        <div class="edge" style="left: 225px; top: 70px; height: 80px;"></div> <!-- Node1 to Node2 -->
-        <div class="edge" style="left: 150px; top: 200px; height: 80px;"></div> <!-- Node2 to Node4 -->
-        <div class="edge" style="left: 450px; top: 200px; height: 80px;"></div> <!-- Node3 to Node5 -->
+        <!-- Root Node -->
+        <div class="flowchart-row">
+            <div class="flowchart-node" id="node1">?</div>
+        </div>
+        <!-- Edge -->
+        <div class="arrow-down"></div>
+        <!-- Branching Nodes -->
+        <div class="flowchart-row flowchart-branch">
+            <!-- Left Branch -->
+            <div class="branch-container">
+                <div class="flowchart-node" id="node2">?</div>
+                <div class="arrow-down"></div>
+                <div class="flowchart-node" id="node3">?</div>
+            </div>
+            <!-- Connector -->
+            <div class="arrow-side"></div>
+            <!-- Right Branch -->
+            <div class="branch-container">
+                <div class="flowchart-node" id="node4">?</div>
+                <div class="arrow-down"></div>
+                <div class="flowchart-node" id="node5">?</div>
+            </div>
+        </div>
+        <!-- Merging Edge -->
+        <div class="arrow-down"></div>
+        <!-- Final Node -->
+        <div class="flowchart-row">
+            <div class="flowchart-node" id="node6">?</div>
+        </div>
     </div>
 
     <script>
@@ -96,9 +153,10 @@
             const correctMappings = {
                 node1: 'data-sources',
                 node2: 'etl-process',
-                node3: 'analytics',
-                node4: 'data-warehouse',
-                node5: 'data-lake'
+                node3: 'data-warehouse',
+                node4: 'data-lake',
+                node5: 'data-analytics',
+                node6: 'reporting'
             };
 
             draggables.forEach(draggable => {
@@ -117,29 +175,28 @@
                     const draggableId = e.dataTransfer.getData('text/plain');
                     const draggableElement = document.getElementById(draggableId);
 
-                    // Remove draggable from previous parent if necessary
+                    // Remove draggable from previous node if necessary
                     if (draggableElement.parentNode.classList.contains('flowchart-node')) {
                         draggableElement.parentNode.classList.remove('correct', 'incorrect');
                         draggableElement.parentNode.textContent = '?';
                     }
 
-                    // Return existing draggable in node to drag-container if any
+                    // Remove any existing child in the node
                     if (node.firstChild && node.firstChild.classList.contains('draggable')) {
                         document.getElementById('drag-container').appendChild(node.firstChild);
                     }
 
-                    // Append draggable to node
                     node.appendChild(draggableElement);
 
                     // Check if the draggable matches the correct node
                     if (correctMappings[node.id] === draggableId) {
                         node.classList.add('correct');
                         node.classList.remove('incorrect');
-                        node.textContent = ''; // Remove the '?'
+                        node.textContent = draggableElement.textContent;
                     } else {
                         node.classList.add('incorrect');
                         node.classList.remove('correct');
-                        node.textContent = '?'; // Keep the '?'
+                        node.textContent = '?';
                     }
                 });
             });
