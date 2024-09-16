@@ -1,0 +1,12 @@
+{
+    "items": [
+        {"id": "item1", "label": "Cat", "correctDropZone": "space1"},
+        {"id": "item2", "label": "Dog", "correctDropZone": "space2"},
+        {"id": "item3", "label": "Bird", "correctDropZone": "space3"}
+    ],
+    "dropZones": [
+        {"id": "space1", "label": "Animal 1"},
+        {"id": "space2", "label": "Animal 2"},
+        {"id": "space3", "label": "Animal 3"}
+    ]
+}
