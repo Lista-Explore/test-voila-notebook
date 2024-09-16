@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Drag and Drop Activity</title>
+    <title>Drag-and-Drop Activity</title>
     <style>
+        /* Your CSS styles */
         #drag-container, #drop-container {
             display: flex;
             gap: 15px;
@@ -26,7 +27,6 @@
         }
         .dropzone {
             background-color: #fafafa;
-            position: relative;
         }
         .dropzone.correct {
             background-color: #c8e6c9;
@@ -39,67 +39,56 @@
     </style>
 </head>
 <body>
+    <p>Drag each item into its corresponding space:</p>
 
-<div id="drag-container">
-    <div class="draggable" draggable="true" id="item1">Item 1</div>
-    <div class="draggable" draggable="true" id="item2">Item 2</div>
-    <div class="draggable" draggable="true" id="item3">Item 3</div>
-</div>
+    <div id="drag-container">
+        <div class="draggable" draggable="true" id="item1">Item 1</div>
+        <div class="draggable" draggable="true" id="item2">Item 2</div>
+        <div class="draggable" draggable="true" id="item3">Item 3</div>
+    </div>
 
-<div id="drop-container">
-    <div class="dropzone" id="space1">Space 1</div>
-    <div class="dropzone" id="space2">Space 2</div>
-    <div class="dropzone" id="space3">Space 3</div>
-</div>
+    <div id="drop-container">
+        <div class="dropzone" id="space1">Space 1</div>
+        <div class="dropzone" id="space2">Space 2</div>
+        <div class="dropzone" id="space3">Space 3</div>
+    </div>
 
-<script>
-    // Get all draggable elements and drop zones
-    const draggables = document.querySelectorAll('.draggable');
-    const dropzones = document.querySelectorAll('.dropzone');
+    <script>
+        // Your JavaScript code here
+        (function() {
+            const draggables = document.querySelectorAll('.draggable');
+            const dropzones = document.querySelectorAll('.dropzone');
 
-    // Add dragstart event to draggables
-    draggables.forEach(draggable => {
-        draggable.addEventListener('dragstart', e => {
-            e.dataTransfer.setData('text/plain', e.target.id);
-        });
-    });
+            draggables.forEach(draggable => {
+                draggable.addEventListener('dragstart', e => {
+                    e.dataTransfer.setData('text/plain', e.target.id);
+                });
+            });
 
-    // Allow drop and handle drop action for dropzones
-    dropzones.forEach(dropzone => {
-        dropzone.addEventListener('dragover', e => {
-            e.preventDefault(); // Allow the drop
-        });
+            dropzones.forEach(dropzone => {
+                dropzone.addEventListener('dragover', e => {
+                    e.preventDefault(); // Allow dropping
+                });
 
-        dropzone.addEventListener('drop', e => {
-            e.preventDefault();
-            const draggableId = e.dataTransfer.getData('text/plain');
-            const draggableElement = document.getElementById(draggableId);
+                dropzone.addEventListener('drop', e => {
+                    e.preventDefault();
+                    const draggableId = e.dataTransfer.getData('text/plain');
+                    const draggableElement = document.getElementById(draggableId);
 
-            // Remove the draggable from its original position (if needed)
-            if (draggableElement.parentNode !== dropzone) {
-                draggableElement.parentNode.removeChild(draggableElement);
-            }
+                    if (!dropzone.hasChildNodes()) {
+                        dropzone.appendChild(draggableElement);
+                    }
 
-            // Append draggable to the dropzone
-            dropzone.appendChild(draggableElement);
-
-            // Adjust the styling of the dropped item
-            draggableElement.style.position = 'static';
-            draggableElement.style.width = '100px';
-            draggableElement.style.height = '60px';
-            draggableElement.style.lineHeight = '60px';
-
-            // Check if the item matches the correct dropzone
-            if (draggableId.replace('item', '') === dropzone.id.replace('space', '')) {
-                dropzone.classList.add('correct');
-                dropzone.classList.remove('incorrect');
-            } else {
-                dropzone.classList.add('incorrect');
-                dropzone.classList.remove('correct');
-            }
-        });
-    });
-</script>
-
+                    if (draggableId.replace('item', '') === dropzone.id.replace('space', '')) {
+                        dropzone.classList.add('correct');
+                        dropzone.classList.remove('incorrect');
+                    } else {
+                        dropzone.classList.add('incorrect');
+                        dropzone.classList.remove('correct');
+                    }
+                });
+            });
+        })();
+    </script>
 </body>
 </html>
