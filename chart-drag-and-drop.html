@@ -2,62 +2,149 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Data Flowchart Drag-and-Drop Activity</title>
     <style>
-        /* CSS styles for the drag-and-drop elements */
-        #drag-container, #drop-container {
+        /* Styles for the drag-and-drop activity */
+        #drag-container, #flowchart {
             display: flex;
-            gap: 15px;
-            margin-bottom: 20px;
             justify-content: center;
+            margin-bottom: 20px;
         }
-        .draggable, .dropzone {
-            width: 120px;
+        #drag-container {
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        .draggable {
+            width: 140px;
             height: 50px;
             border: 2px solid #ccc;
             border-radius: 5px;
+            background-color: #f0f0f0;
             text-align: center;
             line-height: 50px;
             font-weight: bold;
+            cursor: grab;
+            user-select: none;
+            margin: 5px;
+        }
+        .flowchart-node {
+            position: relative;
+            width: 150px;
+            height: 70px;
+            border: 2px dashed #ccc;
+            border-radius: 5px;
+            background-color: #fafafa;
+            text-align: center;
+            line-height: 70px;
+            font-weight: bold;
+            margin: 20px;
             user-select: none;
         }
-        .draggable {
-            background-color: #f0f0f0;
-            cursor: grab;
-        }
-        .dropzone {
-            background-color: #fafafa;
-            position: relative;
-        }
-        .dropzone.correct {
+        .flowchart-node.correct {
             background-color: #c8e6c9;
             border-color: #2e7d32;
+        }
+        .flowchart-node.incorrect {
+            background-color: #ffcdd2;
+            border-color: #c62828;
+        }
+        /* Flowchart layout */
+        #flowchart {
+            flex-direction: column;
+            align-items: center;
+        }
+        .flowchart-row {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+        .arrow {
+            width: 0;
+            height: 0;
+            border-left: 10px solid transparent;
+            border-right: 10px solid transparent;
+            border-top: 20px solid #000;
+            position: absolute;
+            top: -20px;
+        }
+        .arrow-down {
+            transform: rotate(0deg);
+        }
+        .arrow-left {
+            transform: rotate(-90deg);
+            left: -75px;
+            top: 35px;
+        }
+        .arrow-right {
+            transform: rotate(90deg);
+            right: -75px;
+            top: 35px;
         }
     </style>
 </head>
 <body>
-    <p>Drag each data component into its corresponding flowchart node:</p>
+    <h2>Data Flowchart Drag-and-Drop Activity</h2>
+    <p>Drag each component to its correct place in the data flowchart:</p>
 
-    <!-- Draggable items representing data components -->
     <div id="drag-container">
-        <div class="draggable" draggable="true" id="item1">Data Source</div>
-        <div class="draggable" draggable="true" id="item2">Data Warehouse</div>
-        <div class="draggable" draggable="true" id="item3">Data Analysis</div>
+        <div class="draggable" draggable="true" id="data-sources">Data Sources</div>
+        <div class="draggable" draggable="true" id="etl-process">ETL Process</div>
+        <div class="draggable" draggable="true" id="data-warehouse">Data Warehouse</div>
+        <div class="draggable" draggable="true" id="data-lake">Data Lake</div>
+        <div class="draggable" draggable="true" id="analytics-apps">Analytics Applications</div>
+        <div class="draggable" draggable="true" id="bi-tools">BI Tools</div>
     </div>
 
-    <!-- Flowchart structure with nodes -->
-    <div id="drop-container">
-        <div class="dropzone" id="space1">?</div>
-        <div class="dropzone" id="space2">?</div>
-        <div class="dropzone" id="space3">?</div>
+    <div id="flowchart">
+        <!-- Root Node -->
+        <div class="flowchart-row">
+            <div class="flowchart-node" id="node1">?</div>
+        </div>
+        <!-- Arrow Down -->
+        <div class="arrow arrow-down"></div>
+        <!-- Second Level Nodes -->
+        <div class="flowchart-row">
+            <div class="flowchart-node" id="node2">?</div>
+            <!-- Arrows to the sides -->
+            <div class="arrow arrow-left"></div>
+            <div class="arrow arrow-right"></div>
+        </div>
+        <!-- Third Level Nodes -->
+        <div class="flowchart-row">
+            <div class="flowchart-node" id="node3">?</div>
+            <div style="width: 150px;"></div>
+            <div class="flowchart-node" id="node4">?</div>
+        </div>
+        <!-- Arrows Down from Third Level Nodes -->
+        <div class="flowchart-row">
+            <div class="arrow arrow-down" style="left: -75px;"></div>
+            <div style="width: 150px;"></div>
+            <div class="arrow arrow-down" style="right: -75px;"></div>
+        </div>
+        <!-- Fourth Level Nodes -->
+        <div class="flowchart-row">
+            <div class="flowchart-node" id="node5">?</div>
+            <div style="width: 150px;"></div>
+            <div class="flowchart-node" id="node6">?</div>
+        </div>
     </div>
 
     <script>
-        // JavaScript code for drag-and-drop functionality
+        // JavaScript code for the drag-and-drop functionality
         (function() {
             const draggables = document.querySelectorAll('.draggable');
-            const dropzones = document.querySelectorAll('.dropzone');
+            const nodes = document.querySelectorAll('.flowchart-node');
+
+            // Mapping of node IDs to correct draggable IDs
+            const correctMappings = {
+                node1: 'data-sources',
+                node2: 'etl-process',
+                node3: 'data-warehouse',
+                node4: 'data-lake',
+                node5: 'bi-tools',
+                node6: 'analytics-apps'
+            };
 
             draggables.forEach(draggable => {
                 draggable.addEventListener('dragstart', e => {
@@ -65,20 +152,41 @@
                 });
             });
 
-            dropzones.forEach(dropzone => {
-                dropzone.addEventListener('dragover', e => {
+            nodes.forEach(node => {
+                node.addEventListener('dragover', e => {
                     e.preventDefault(); // Allow dropping
                 });
 
-                dropzone.addEventListener('drop', e => {
+                node.addEventListener('drop', e => {
                     e.preventDefault();
                     const draggableId = e.dataTransfer.getData('text/plain');
                     const draggableElement = document.getElementById(draggableId);
 
-                    // If correct match, update node to green and display correct text
-                    if (draggableId.replace('item', '') === dropzone.id.replace('space', '')) {
-                        dropzone.classList.add('correct');
-                        dropzone.innerText = draggableElement.innerText;
+                    // Remove draggable from previous parent if necessary
+                    if (draggableElement.parentNode.classList.contains('flowchart-node')) {
+                        draggableElement.parentNode.classList.remove('correct', 'incorrect');
+                        draggableElement.parentNode.textContent = '?';
+                    }
+
+                    // Return existing draggable to drag-container if node already has one
+                    if (node.firstChild && node.firstChild !== draggableElement) {
+                        const existingDraggable = node.firstChild;
+                        document.getElementById('drag-container').appendChild(existingDraggable);
+                    }
+
+                    node.appendChild(draggableElement);
+
+                    // Check if the draggable matches the correct node
+                    if (correctMappings[node.id] === draggableId) {
+                        node.classList.add('correct');
+                        node.classList.remove('incorrect');
+                        node.firstChild.style.display = 'none'; // Hide the draggable text
+                        node.textContent = draggableElement.textContent;
+                    } else {
+                        node.classList.add('incorrect');
+                        node.classList.remove('correct');
+                        node.firstChild.style.display = ''; // Show the draggable text
+                        node.textContent = '?';
                     }
                 });
             });
