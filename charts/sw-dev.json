@@ -1,0 +1,20 @@
+{
+    "nodes": [
+      {"id": "plan", "label": "Plan", "type": "phase-node", "color": "#ffeb3b"},
+      {"id": "develop", "label": "Develop", "type": "phase-node", "color": "#8bc34a"},
+      {"id": "test", "label": "Test", "type": "phase-node", "color": "#03a9f4"},
+      {"id": "deploy", "label": "Deploy", "type": "phase-node", "color": "#9c27b0"}
+    ],
+    "dropzones": [
+      {"id": "zone1", "label": "?", "acceptedTypes": ["phase-node"], "correctNode": "plan", "position": {"x": 100, "y": 200}},
+      {"id": "zone2", "label": "?", "acceptedTypes": ["phase-node"], "correctNode": "develop", "position": {"x": 300, "y": 200}},
+      {"id": "zone3", "label": "?", "acceptedTypes": ["phase-node"], "correctNode": "test", "position": {"x": 500, "y": 200}},
+      {"id": "zone4", "label": "?", "acceptedTypes": ["phase-node"], "correctNode": "deploy", "position": {"x": 700, "y": 200}}
+    ],
+    "edges": [
+      {"from": "zone1", "to": "zone2", "type": "arrow", "color": "#000"},
+      {"from": "zone2", "to": "zone3", "type": "arrow", "color": "#000"},
+      {"from": "zone3", "to": "zone4", "type": "arrow", "color": "#000"}
+    ]
+  }
+  

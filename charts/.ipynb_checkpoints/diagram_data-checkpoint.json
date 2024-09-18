@@ -1,0 +1,56 @@
+{
+    "nodes": [
+      {
+        "id": "node1",
+        "label": "Start",
+        "type": "circle",
+        "color": "#76c7c0",
+        "position": {"x": 50, "y": 50}
+      },
+      {
+        "id": "node2",
+        "label": "Process",
+        "type": "rectangle",
+        "color": "#f4d03f",
+        "position": {"x": 150, "y": 50}
+      },
+      {
+        "id": "node3",
+        "label": "Decision",
+        "type": "diamond",
+        "color": "#e74c3c",
+        "position": {"x": 250, "y": 50}
+      }
+    ],
+    "edges": [
+      {
+        "from": "node1",
+        "to": "node2",
+        "label": "Next",
+        "type": "straight",
+        "color": "#000"
+      },
+      {
+        "from": "node2",
+        "to": "node3",
+        "label": "Yes",
+        "type": "dashed",
+        "color": "#000"
+      }
+    ],
+    "dropzones": [
+      {
+        "id": "dropzone1",
+        "label": "Drop Here",
+        "position": {"x": 100, "y": 300},
+        "acceptedTypes": ["circle", "rectangle"]
+      },
+      {
+        "id": "dropzone2",
+        "label": "Drop Decision",
+        "position": {"x": 300, "y": 300},
+        "acceptedTypes": ["diamond"]
+      }
+    ]
+  }
+  

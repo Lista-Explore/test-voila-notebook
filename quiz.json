@@ -33,5 +33,18 @@
         ],
         "shuffle_answers": true,
         "feedback": "2, 3, and 5 are prime numbers."
+    },
+    {
+        "question": "Identify this famous landmark.",
+        "type": "multiple_choice",
+        "answers": [
+            {"answer": "Eiffel Tower", "correct": true},
+            {"answer": "Statue of Liberty", "correct": false},
+            {"answer": "Big Ben", "correct": false},
+            {"answer": "Leaning Tower of Pisa", "correct": false}
+        ],
+        "image": "https://cdn.pixabay.com/photo/2015/10/06/18/26/eiffel-tower-975004_1280.jpg",
+        "shuffle_answers": true,
+        "feedback": "The Eiffel Tower is a wrought-iron lattice tower on the Champ de Mars in Paris, France."
     }
 ]

@@ -1,0 +1,61 @@
+{
+  "nodes": [
+    {
+      "id": "extract",
+      "label": "Extract Data",
+      "type": "data-node",
+      "color": "#ffcccc"
+    },
+    {
+      "id": "transform",
+      "label": "Transform Data",
+      "type": "data-node",
+      "color": "#ccffcc"
+    },
+    {
+      "id": "load",
+      "label": "Load Data",
+      "type": "data-node",
+      "color": "#ccccff"
+    }
+  ],
+  "dropzones": [
+    {
+      "id": "zone1",
+      "label": "?",
+      "acceptedTypes": ["data-node"],
+      "correctNode": "extract",
+      "position": {"x": 100, "y": 200}
+    },
+    {
+      "id": "zone2",
+      "label": "?",
+      "acceptedTypes": ["data-node"],
+      "correctNode": "transform",
+      "position": {"x": 300, "y": 200}
+    },
+    {
+      "id": "zone3",
+      "label": "?",
+      "acceptedTypes": ["data-node"],
+      "correctNode": "load",
+      "position": {"x": 500, "y": 200}
+    }
+  ],
+  "edges": [
+    {
+      "from": "zone1",
+      "to": "zone2",
+      "label": "",
+      "type": "arrow",
+      "color": "#000"
+    },
+    {
+      "from": "zone2",
+      "to": "zone3",
+      "label": "",
+      "type": "arrow",
+      "color": "#000"
+    }
+  ]
+}
