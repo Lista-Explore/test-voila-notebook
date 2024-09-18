@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Drag-and-Drop Activity</title>
+    <style>
+        /* Your CSS styles */
+        #drag-container, #drop-container {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        .draggable, .dropzone {
+            width: 100px;
+            height: 60px;
+            border: 2px solid #ccc;
+            border-radius: 5px;
+            text-align: center;
+            line-height: 60px;
+            font-weight: bold;
+            user-select: none;
+        }
+        .draggable {
+            background-color: #f0f0f0;
+            cursor: grab;
+        }
+        .dropzone {
+            background-color: #fafafa;
+        }
+        .dropzone.correct {
+            background-color: #c8e6c9;
+            border-color: #2e7d32;
+        }
+        .dropzone.incorrect {
+            background-color: #ffcdd2;
+            border-color: #c62828;
+        }
+    </style>
+</head>
+<body>
+    <p>Drag each item into its corresponding space:</p>
+
+    <div id="drag-container">
+        <!-- Draggable items will be inserted here -->
+    </div>
+
+    <div id="drop-container">
+        <!-- Drop zones will be inserted here -->
+    </div>
+
+    <script>
+        (function() {
+            // The 'data' variable will be injected from the notebook
+            if (typeof data === 'undefined') {
+                document.body.innerHTML = '<p>Error: No data provided.</p>';
+                return;
+            }
+
+            const draggablesData = data.draggables;
+            const dropzonesData = data.dropzones;
+            const correctMappings = data.mappings;
+
+            const dragContainer = document.getElementById('drag-container');
+            const dropContainer = document.getElementById('drop-container');
+
+            // Create draggable items
+            draggablesData.forEach(item => {
+                const div = document.createElement('div');
+                div.classList.add('draggable');
+                div.setAttribute('draggable', 'true');
+                div.id = item.id;
+                div.textContent = item.label;
+                dragContainer.appendChild(div);
+            });
+
+            // Create drop zones
+            dropzonesData.forEach(space => {
+                const div = document.createElement('div');
+                div.classList.add('dropzone');
+                div.id = space.id;
+                div.textContent = space.label;
+                dropContainer.appendChild(div);
+            });
+
+            // Add event listeners
+            const draggables = document.querySelectorAll('.draggable');
+            const dropzones = document.querySelectorAll('.dropzone');
+
+            draggables.forEach(draggable => {
+                draggable.addEventListener('dragstart', e => {
+                    e.dataTransfer.setData('text/plain', e.target.id);
+                });
+            });
+
+            dropzones.forEach(dropzone => {
+                dropzone.addEventListener('dragover', e => {
+                    e.preventDefault(); // Allow dropping
+                });
+
+                dropzone.addEventListener('drop', e => {
+                    e.preventDefault();
+                    const draggableId = e.dataTransfer.getData('text/plain');
+                    const draggableElement = document.getElementById(draggableId);
+
+                    if (!dropzone.hasChildNodes()) {
+                        dropzone.appendChild(draggableElement);
+                    }
+
+                    const dropzoneId = dropzone.id;
+                    const isCorrect = correctMappings[draggableId] === dropzoneId;
+
+                    if (isCorrect) {
+                        dropzone.classList.add('correct');
+                        dropzone.classList.remove('incorrect');
+                    } else {
+                        dropzone.classList.add('incorrect');
+                        dropzone.classList.remove('correct');
+                    }
+                });
+            });
+        })();
+    </script>
+</body>
+</html>
